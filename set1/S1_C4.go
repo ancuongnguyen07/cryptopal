@@ -7,7 +7,7 @@ import (
 	"unicode"
 )
 
-const cipherFile = "ciphertexts_C4.txt"
+const cipherFile = "set1/ciphertexts_C4.txt"
 
 // Check if the given string only containing ASCII characters
 func IsASCIIRange(s string) bool {

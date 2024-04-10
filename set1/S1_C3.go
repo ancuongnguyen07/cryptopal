@@ -35,7 +35,7 @@ func GetMaxCount(freqMap map[rune]int) rune {
 }
 
 // Decrypt a ciphertext by XORing it with the given key
-func Xor(ciphertext []byte, key byte) string {
+func SingleCharXor(ciphertext []byte, key byte) string {
 	decryptedText := make([]byte, len(ciphertext))
 	for i, c := range ciphertext {
 		decryptedText[i] = c ^ key
@@ -44,7 +44,7 @@ func Xor(ciphertext []byte, key byte) string {
 	return string(decryptedText)
 }
 
-// The given hex-encoded ciphertext has been XORed against a single character.
+// The given ciphertext has been XORed against a single character.
 // Find the key, decrypt the message.
 //
 // Return:
@@ -54,15 +54,12 @@ func Xor(ciphertext []byte, key byte) string {
 // - key
 //
 // - err
-func XORCipher(hexCiphertext string) (string, string, error) {
-	ciphertext, err := hex.DecodeString(hexCiphertext)
-	if err != nil {
-		return "", "", err
-	}
+func XORCipher(ciphertext string) (string, string, error) {
+
 	freqMap := GetCount(string(ciphertext))
 	key := GetMaxCount(freqMap) ^ 32 // uppecase and space
 
-	plaintext := Xor(ciphertext, byte(key))
+	plaintext := SingleCharXor([]byte(ciphertext), byte(key))
 
 	return plaintext, string(key), nil
 }
@@ -70,7 +67,11 @@ func XORCipher(hexCiphertext string) (string, string, error) {
 func S1C3RunChallenge() {
 	// hex-encoded ciphertext
 	hexCiphertext := "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
-	plaintext, key, err := XORCipher(hexCiphertext)
+	ciphertext, err := hex.DecodeString(hexCiphertext)
+	if err != nil {
+		panic(err)
+	}
+	plaintext, key, err := XORCipher(string(ciphertext))
 	if err != nil {
 		panic(err)
 	}

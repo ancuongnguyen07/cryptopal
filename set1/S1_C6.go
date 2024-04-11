@@ -53,17 +53,17 @@ func findKeySize(ciphertext []byte) int {
 	return bestKeySize
 }
 
-func S1C6RunChallenge() {
+func S1C6RunChallenge() error {
 	data, err := os.ReadFile("set1/6.txt")
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	// As the ciphertext has been base64'd after being encrypted
 	// We need to de-base64 it.
 	ciphertext, err := base64.StdEncoding.DecodeString(string(data))
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	realKeySize := findKeySize(ciphertext)
@@ -101,4 +101,6 @@ func S1C6RunChallenge() {
 	fmt.Println("Plaintext:\n", plaintext)
 	fmt.Println("Key:\n", keyStrBuilder.String())
 	fmt.Println("KeySize:\n", realKeySize)
+
+	return nil
 }

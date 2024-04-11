@@ -7,29 +7,40 @@ import (
 	"os"
 )
 
+func runChallenge(setChallenge string) error {
+	var challengeFunc func() error
+	switch setChallenge {
+	case "13":
+		challengeFunc = set1.S1C3RunChallenge
+	case "14":
+		challengeFunc = set1.S1C4RunChallenge
+	case "15":
+		challengeFunc = set1.S1C5RunChallenge
+	case "16":
+		challengeFunc = set1.S1C6RunChallenge
+	case "17":
+		challengeFunc = set1.S1C7RunChallenge
+	case "18":
+		challengeFunc = set1.S1C8RunChallenge
+	default:
+		return errors.New("invalid set challenge number")
+	}
+
+	return challengeFunc()
+}
+
 func main() {
 	if len(os.Args) != 2 {
 		fmt.Println("cryptopal [set/challenge]")
 		fmt.Println("e.g: cryptopal 14 -> run set 1 challenge 4")
-		panic(errors.New("invalid number of args: expected 2"))
+		fmt.Printf("invalid number of args: expected 2, got %d\n", len(os.Args))
+		os.Exit(1)
 	}
 	setChallenge := os.Args[1]
 
-	switch setChallenge {
-	case "13":
-		set1.S1C3RunChallenge()
-	case "14":
-		set1.S1C4RunChallenge()
-	case "15":
-		set1.S1C5RunChallenge()
-	case "16":
-		set1.S1C6RunChallenge()
-	case "17":
-		set1.S1C7RunChallenge()
-	case "18":
-		set1.S1C8RunChallenge()
-	default:
-		panic(errors.New("invalid set challenge number"))
+	err := runChallenge(setChallenge)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
-
 }

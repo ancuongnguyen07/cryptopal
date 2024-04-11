@@ -27,10 +27,10 @@ func isECBEncrypted(ciphertext []byte) (bool, error) {
 
 }
 
-func S1C8RunChallenge() {
+func S1C8RunChallenge() error {
 	file, err := os.Open("set1/8.txt")
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer file.Close()
 
@@ -43,7 +43,7 @@ func S1C8RunChallenge() {
 		ciphertext := make([]byte, hex.DecodedLen(len(hexCiphertext)))
 		n, err := hex.Decode(ciphertext, hexCiphertext)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		ciphertext = ciphertext[:n]
 
@@ -53,7 +53,7 @@ func S1C8RunChallenge() {
 	for i, line := range inputData {
 		isECBEncryptedC, err := isECBEncrypted(line)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		if isECBEncryptedC {
 			ECBEncrypted = append(ECBEncrypted, i)
@@ -61,5 +61,5 @@ func S1C8RunChallenge() {
 	}
 
 	fmt.Println("Hex-encoded ciphertext that was ECB-encrypted (line number):\n", ECBEncrypted)
-
+	return nil
 }

@@ -20,11 +20,11 @@ func IsASCIIRange(s string) bool {
 }
 
 // Set1 | Challenge 4
-func S1C4RunChallenge() {
+func S1C4RunChallenge() error {
 	file, err := os.Open(cipherFile)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
-		return
+		return err
 	}
 	defer file.Close()
 
@@ -44,5 +44,5 @@ func S1C4RunChallenge() {
 			fmt.Printf("Plaintext: %s\n", plaintext)
 		}
 	}
-
+	return nil
 }

@@ -20,22 +20,23 @@ func DecryptAES128ECB(ciphertext, key []byte) ([]byte, error) {
 	return plaintext, nil
 }
 
-func S1C7RunChallenge() {
+func S1C7RunChallenge() error {
 	data, err := os.ReadFile("set1/7.txt")
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	ciphertext, err := base64.StdEncoding.DecodeString(string(data))
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	key := "YELLOW SUBMARINE"
 	plaintext, err := DecryptAES128ECB(ciphertext, []byte(key))
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	fmt.Println("Plaintext: \n", string(plaintext))
+	return nil
 }

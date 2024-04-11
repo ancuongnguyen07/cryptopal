@@ -64,18 +64,19 @@ func XORCipher(ciphertext string) (string, string, error) {
 	return plaintext, string(key), nil
 }
 
-func S1C3RunChallenge() {
+func S1C3RunChallenge() error {
 	// hex-encoded ciphertext
 	hexCiphertext := "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
 	ciphertext, err := hex.DecodeString(hexCiphertext)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	plaintext, key, err := XORCipher(string(ciphertext))
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	fmt.Printf("Hex-encoded Ciphertext: %s\n", hexCiphertext)
 	fmt.Printf("Key:%s\nPlaintext: %s\n", key, plaintext)
+	return nil
 }

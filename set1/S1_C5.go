@@ -27,7 +27,7 @@ func RepeatXOR(text string, key string) (string, error) {
 	return string(output), nil
 }
 
-func S1C5RunChallenge() {
+func S1C5RunChallenge() error {
 	plaintext := `Burning 'em, if you ain't quick and nimble
 I go crazy when I hear a cymbal`
 	key := "ICE"
@@ -42,4 +42,5 @@ I go crazy when I hear a cymbal`
 
 	fmt.Println("Ciphertext:", ciphertext)
 	fmt.Println("Encrypted text == Expected output: ", expected == ciphertext)
+	return nil
 }

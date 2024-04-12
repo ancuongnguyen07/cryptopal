@@ -19,23 +19,22 @@ func EncryptCBC(plaintext, key, iv []byte) ([]byte, error) {
 		return nil, err
 	}
 
+	toBeXOR := iv
 	ciphertext := make([]byte, len(paddedPlaintext))
 	for i := 0; i < len(paddedPlaintext); i += BlockSize {
 		endIndex := i + BlockSize
 		plainBlock := paddedPlaintext[i:endIndex]
 
 		// Do XORwith the IV or the previous output of block cipher
-		if i == 0 {
-			plainBlock, err = utils.XOR(plainBlock, iv)
-		} else {
-			plainBlock, err = utils.XOR(plainBlock, ciphertext[i-BlockSize:i])
-		}
+		plainBlock, err = utils.XOR(plainBlock, toBeXOR)
 		if err != nil {
 			return []byte{}, err
 		}
 
-		// Do ECB decryption on each block
+		// Do ECB encryption on each block
 		cipher.Encrypt(ciphertext[i:endIndex], plainBlock)
+		// update to be XORed
+		toBeXOR = ciphertext[i:endIndex]
 
 	}
 	return ciphertext, nil
@@ -49,23 +48,24 @@ func DecryptCBC(ciphertext, key, iv []byte) ([]byte, error) {
 		return nil, err
 	}
 
+	toBeXOR := iv
 	plaintext := make([]byte, len(paddedCiphertext))
 	for i := 0; i < len(paddedCiphertext); i += BlockSize {
 		endIndex := i + BlockSize
 		cipherBlock := paddedCiphertext[i:endIndex]
 
+		// Do ECB decryption on each block
 		cipher.Decrypt(plaintext[i:endIndex], cipherBlock)
 		plainBlock := plaintext[i:endIndex]
-		if i == 0 {
-			plainBlock, err = utils.XOR(plainBlock, iv)
-		} else {
-			plainBlock, err = utils.XOR(plainBlock, ciphertext[i-BlockSize:i])
-		}
+
+		plainBlock, err = utils.XOR(plainBlock, toBeXOR)
 		if err != nil {
 			return []byte{}, err
 		}
 
 		copy(plaintext[i:endIndex], plainBlock)
+		// update to be XORed
+		toBeXOR = cipherBlock
 	}
 	return plaintext[:len(ciphertext)], nil
 }

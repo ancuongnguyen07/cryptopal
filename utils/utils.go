@@ -20,18 +20,9 @@ func HexToBase64(hexString string) (string, error) {
 }
 
 // Do XOR on two equal-length buffers
-func XOR(str1, str2 string) (string, error) {
-	buf1, err := hex.DecodeString(str1)
-	if err != nil {
-		return "", err
-	}
-	buf2, err := hex.DecodeString(str2)
-	if err != nil {
-		return "", err
-	}
-
+func XOR(buf1, buf2 []byte) ([]byte, error) {
 	if len(buf1) != len(buf2) {
-		return "", errors.New("invalid lenghts, they should be equal")
+		return []byte{}, errors.New("invalid lenghts of XORed buffers, they should be equal")
 	}
 
 	xoredBuff := make([]byte, len(buf1))
@@ -39,5 +30,5 @@ func XOR(str1, str2 string) (string, error) {
 		xoredBuff[i] = buf1[i] ^ buf2[i]
 	}
 
-	return hex.EncodeToString(xoredBuff), nil
+	return xoredBuff, nil
 }

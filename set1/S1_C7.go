@@ -7,6 +7,19 @@ import (
 	"os"
 )
 
+func EncryptAES128ECB(plaintext, key []byte) ([]byte, error) {
+	cipher, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+
+	ciphertext := make([]byte, len(plaintext))
+	for i := 0; i < len(ciphertext); i += 16 {
+		cipher.Encrypt(ciphertext[i:i+16], plaintext[i:i+16])
+	}
+	return ciphertext, nil
+}
+
 func DecryptAES128ECB(ciphertext, key []byte) ([]byte, error) {
 	cipher, err := aes.NewCipher(key)
 	if err != nil {

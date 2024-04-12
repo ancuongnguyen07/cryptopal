@@ -2,6 +2,7 @@ package utils_test
 
 import (
 	"cryptopal/utils"
+	"encoding/hex"
 	"testing"
 )
 
@@ -24,12 +25,22 @@ func TestXOR(t *testing.T) {
 	str2 := "686974207468652062756c6c277320657965"
 	expectedOutput := "746865206b696420646f6e277420706c6179"
 
-	xoredBuff, err := utils.XOR(str1, str2)
+	buff1, err := hex.DecodeString(str1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	buff2, err := hex.DecodeString(str2)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	xoredBuff, err := utils.XOR(buff1, buff2)
 	if err != nil {
 		t.Fatalf(`There should not be an error: %v`, err)
 	}
 
-	if expectedOutput != xoredBuff {
+	if expectedOutput != hex.EncodeToString(xoredBuff) {
 		t.Fatalf(`Error in XORing: expected "%s", got "%s"`, expectedOutput, xoredBuff)
 	}
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"cryptopal/set1"
+	"cryptopal/set2"
 	"errors"
 	"fmt"
 	"os"
@@ -22,6 +23,10 @@ func runChallenge(setChallenge string) error {
 		challengeFunc = set1.S1C7RunChallenge
 	case "18":
 		challengeFunc = set1.S1C8RunChallenge
+	case "29":
+		challengeFunc = set2.S2C9RunChallenge
+	case "210":
+		challengeFunc = set2.S2C10RunChallenge
 	default:
 		return errors.New("invalid set challenge number")
 	}

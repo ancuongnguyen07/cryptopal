@@ -14,7 +14,7 @@ func EncryptAES128ECB(plaintext, key []byte) ([]byte, error) {
 	}
 
 	ciphertext := make([]byte, len(plaintext))
-	for i := 0; i < len(ciphertext); i += 16 {
+	for i := 0; i < len(ciphertext)-16; i += 16 {
 		cipher.Encrypt(ciphertext[i:i+16], plaintext[i:i+16])
 	}
 	return ciphertext, nil

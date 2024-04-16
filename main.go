@@ -29,6 +29,10 @@ func runChallenge(setChallenge string) error {
 		challengeFunc = set2.S2C10RunChallenge
 	case "211":
 		challengeFunc = set2.S2C11RunChallenge
+	case "212":
+		challengeFunc = set2.S2C12RunChallenge
+	case "213":
+		challengeFunc = set2.S2C13RunChallenge
 	default:
 		return errors.New("invalid set challenge number")
 	}

@@ -1,11 +1,22 @@
 package set1
 
 import (
+	"bytes"
 	"crypto/aes"
 	"encoding/base64"
 	"fmt"
 	"os"
 )
+
+// PKCS#7 padding
+func padding(s []byte, blockSize int) []byte {
+	leftOverBytes := len(s) % blockSize
+	if leftOverBytes > 0 {
+		paddedBytes := blockSize - leftOverBytes
+		return append(s, bytes.Repeat([]byte{byte(paddedBytes)}, paddedBytes)...)
+	}
+	return s
+}
 
 func EncryptAES128ECB(plaintext, key []byte) ([]byte, error) {
 	cipher, err := aes.NewCipher(key)
@@ -13,8 +24,10 @@ func EncryptAES128ECB(plaintext, key []byte) ([]byte, error) {
 		return nil, err
 	}
 
+	plaintext = padding(plaintext, 16)
+
 	ciphertext := make([]byte, len(plaintext))
-	for i := 0; i < len(ciphertext)-16; i += 16 {
+	for i := 0; i < len(ciphertext); i += 16 {
 		cipher.Encrypt(ciphertext[i:i+16], plaintext[i:i+16])
 	}
 	return ciphertext, nil

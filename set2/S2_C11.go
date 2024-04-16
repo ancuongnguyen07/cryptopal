@@ -11,7 +11,7 @@ import (
 
 // Return the secure psuedorandom bytes.
 // n is the number of bytes.
-func randomAESKey(n int) ([]byte, error) {
+func RandomKey(n int) ([]byte, error) {
 	randomBytes := make([]byte, n)
 	_, err := crypto_rand.Read(randomBytes)
 	if err != nil {
@@ -34,8 +34,8 @@ func appendBytes(text []byte) []byte {
 	return append(append(prefix, text...), suffix...)
 }
 
-func AESEncOracle(plaintext []byte) ([]byte, int, error) {
-	key, err := randomAESKey(BlockSize)
+func aesEncOracle(plaintext []byte) ([]byte, int, error) {
+	key, err := RandomKey(BlockSize)
 	if err != nil {
 		return []byte{}, 0, err
 	}
@@ -56,7 +56,7 @@ func AESEncOracle(plaintext []byte) ([]byte, int, error) {
 	case 1:
 		{
 			// CBC mode
-			IV, err := randomAESKey(BlockSize)
+			IV, err := RandomKey(BlockSize)
 			if err != nil {
 				return []byte{}, 0, err
 			}
@@ -91,7 +91,7 @@ func S2C11RunChallenge() error {
 	n := 1000
 	plaintext := bytes.Repeat([]byte{'c'}, 16*5)
 	for range n {
-		ciphertext, encMode, err := AESEncOracle(plaintext)
+		ciphertext, encMode, err := aesEncOracle(plaintext)
 		if err != nil {
 			return err
 		}

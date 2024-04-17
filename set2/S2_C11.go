@@ -11,7 +11,7 @@ import (
 
 // Return the secure psuedorandom bytes.
 // n is the number of bytes.
-func RandomKey(n int) ([]byte, error) {
+func RandomBytes(n int) ([]byte, error) {
 	randomBytes := make([]byte, n)
 	_, err := crypto_rand.Read(randomBytes)
 	if err != nil {
@@ -35,7 +35,7 @@ func appendBytes(text []byte) []byte {
 }
 
 func aesEncOracle(plaintext []byte) ([]byte, int, error) {
-	key, err := RandomKey(BlockSize)
+	key, err := RandomBytes(BlockSize)
 	if err != nil {
 		return []byte{}, 0, err
 	}
@@ -56,7 +56,7 @@ func aesEncOracle(plaintext []byte) ([]byte, int, error) {
 	case 1:
 		{
 			// CBC mode
-			IV, err := RandomKey(BlockSize)
+			IV, err := RandomBytes(BlockSize)
 			if err != nil {
 				return []byte{}, 0, err
 			}

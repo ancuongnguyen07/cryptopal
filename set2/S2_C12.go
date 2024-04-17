@@ -10,25 +10,29 @@ import (
 )
 
 var GlobalKey []byte
+var hiddenMess []byte
 
 func init() {
-	key, err := RandomKey(16)
+	key, err := RandomBytes(16)
 	if err != nil {
 		panic(err)
 	}
 	GlobalKey = key
+
+	unknownStr, err := os.ReadFile("set2/12.txt")
+	if err != nil {
+		panic(err)
+	}
+	unknownStr, err = base64.StdEncoding.DecodeString(string(unknownStr))
+	if err != nil {
+		panic(err)
+	}
+	hiddenMess = unknownStr
 }
 
 func oracleEncrypt(plaintext []byte) ([]byte, error) {
 	key := GlobalKey
-	unknownStr, err := os.ReadFile("set2/12.txt")
-	if err != nil {
-		return []byte{}, err
-	}
-	unknownStr, err = base64.StdEncoding.DecodeString(string(unknownStr))
-	if err != nil {
-		return []byte{}, err
-	}
+	unknownStr := hiddenMess
 
 	plaintext = append(plaintext, unknownStr...)
 	ciphertext, err := set1.EncryptAES128ECB(plaintext, key)
